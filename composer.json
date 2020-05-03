@@ -1,0 +1,40 @@
+{
+    "name": "hsupu/feishu-bot-sdk-php",
+    "type": "library",
+    "description": "A 3rd-party Feishu/Lark Bot SDK",
+    "homepage": "https://github.com/hsupu/feishu-bot-sdk-php",
+    "license": "MIT",
+    "keywords": [
+        "feishu",
+        "lark"
+    ],
+    "authors": [
+        {
+            "name": "xp",
+            "email": "a.xp@live.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=7.4",
+        "ext-json": "*",
+        "ext-openssl": "*",
+        "guzzlehttp/guzzle": "^6.5"
+    },
+    "require-dev": {
+        "ext-curl": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "FeishuBot\\": "src/"
+        },
+        "files": [
+            "src/functions_autoload.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "FeishuBotTest\\": "test/"
+        }
+    }
+}
