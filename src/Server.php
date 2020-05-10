@@ -20,6 +20,7 @@ class Server
         if (!is_null($config->encryptKey)) {
             $this->encryptor = new Encryptor($config->encryptKey);
         }
+        $this->eventHub = new EventHub();
     }
 
     public function getEventHub() : EventHub {
@@ -30,14 +31,17 @@ class Server
         /**
          * @var $json object
          */
-        $json = json_decode($body, JSON_UNESCAPED_UNICODE);
+        $json = json_decode($body, false, 512, JSON_UNESCAPED_UNICODE);
+        if (!is_object($json)) {
+            throw new FeishuServerException(FeishuServerException::CODE_BAD_REQUEST, $json);
+        }
         if (!is_null($this->encryptor)) {
             $json = $this->encryptor->decryptString($json->encrypt);
         }
 
         $verifyToken = $json->token;
         if ($verifyToken != $this->config->verifyToken) {
-            throw new FeishuServerException(FeishuServerException::CODE_TOKEN_MISMATCH);
+            throw new FeishuServerException(FeishuServerException::CODE_TOKEN_MISMATCH, $verifyToken);
         }
 
         $requestType = $json->type;
