@@ -73,7 +73,7 @@ class EventHub
     }
 
     public function __call(string $event, array $arguments) : void {
-        $func = $this->${$event};
+        $func = $this->{$event};
         if (is_null($func)) {
             throw new FeishuServerException(FeishuServerException::CODE_EVENT_NOT_HANDLED, [
                 'type' => $event,
