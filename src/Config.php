@@ -6,23 +6,11 @@ namespace FeishuBot;
 
 class Config
 {
-    /**
-     * @var string
-     */
-    public $appId;
+    public string $appId;
 
-    /**
-     * @var string
-     */
-    public $appSecret;
+    public string $appSecret;
 
-    /**
-     * @var string
-     */
-    public $verifyToken;
+    public string $verifyToken;
 
-    /**
-     * @var null|string
-     */
-    public $encryptKey = null;
+    public ?string $encryptKey = null;
 }

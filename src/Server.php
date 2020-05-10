@@ -11,7 +11,7 @@ class Server
 {
     private Config $config;
 
-    private Encryptor $encryptor;
+    private ?Encryptor $encryptor = null;
 
     private EventHub $eventHub;
 

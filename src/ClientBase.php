@@ -201,7 +201,7 @@ class ClientBase
         return $this->callPost(Endpoints::GET_TENANT_ACCESS_TOKEN, $request);
     }
 
-    public function getAppAccessToken() : string {
+    public function getAppAccessToken() : ?string {
         $accessToken = $this->tokenStorage->getAppAccessToken();
         if (is_null($accessToken)) {
             $result = $this->fetchAppAccessToken();
@@ -212,7 +212,7 @@ class ClientBase
         return $accessToken;
     }
 
-    public function getTenantAccessToken() : string {
+    public function getTenantAccessToken() : ?string {
         $accessToken = $this->tokenStorage->getTenantAccessToken();
         if (is_null($accessToken)) {
             $result = $this->fetchTenantAccessToken();

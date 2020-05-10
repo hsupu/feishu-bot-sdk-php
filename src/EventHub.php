@@ -49,12 +49,12 @@ class EventHub
 
     private array $registry = [];
 
-    private static function filter(string $event) {
+    private static function filter(string $event) : ?string {
         if (is_null(self::$events)) {
             $ref = new \ReflectionClass(self::class);
-            self::$events = array_keys($ref->getConstants());
+            self::$events = array_values($ref->getConstants());
         }
-        if (array_key_exists($event, self::$events)) {
+        if (in_array($event, self::$events)) {
             return $event;
         }
         return null;
@@ -68,7 +68,7 @@ class EventHub
         unset($this->registry[$event]);
     }
 
-    public function __get(string $event) : callable {
+    public function __get(string $event) : ?callable {
         return $this->registry[$event];
     }
 

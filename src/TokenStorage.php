@@ -22,7 +22,7 @@ class TokenStorage
         $this->cache = $cache;
     }
 
-    public function getAppAccessToken() : string {
+    public function getAppAccessToken() : ?string {
         return $this->cache->get($this->appAccessTokenKeyName);
     }
 
@@ -30,7 +30,7 @@ class TokenStorage
         $this->cache->set($this->appAccessTokenKeyName, $value, $expire);
     }
 
-    public function getTenantAccessToken() : string {
+    public function getTenantAccessToken() : ?string {
         return $this->cache->get($this->tenantAccessTokenKeyName);
     }
 
