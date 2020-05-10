@@ -1,6 +1,6 @@
 {
     "name": "hsupu/feishu-bot-sdk-php",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "type": "library",
     "description": "A 3rd-party Feishu/Lark Bot SDK",
     "homepage": "https://github.com/hsupu/feishu-bot-sdk-php",
