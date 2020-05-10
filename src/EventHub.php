@@ -4,6 +4,7 @@
  */
 namespace FeishuBot;
 
+use FeishuBot\Event\IEventHandler;
 use FeishuBot\Exception\FeishuServerException;
 
 class EventHub
@@ -44,17 +45,11 @@ class EventHub
     public const WIDGET_CREATE_INSTANCE = 'create_widget_instance';
     public const WIDGET_DELETE_INSTANCE = 'delete_widget_instance';
 
-    /**
-     * @var array
-     */
-    private static $events = null;
+    private static ?array $events = null;
 
-    /**
-     * @var array
-     */
-    private $registry = [];
+    private array $registry = [];
 
-    private static function filter($event) {
+    private static function filter(string $event) {
         if (is_null(self::$events)) {
             $ref = new \ReflectionClass(self::class);
             self::$events = array_keys($ref->getConstants());
@@ -65,36 +60,19 @@ class EventHub
         return null;
     }
 
-    /**
-     * @param string $event
-     * @param callable $handler
-     * @return void
-     */
-    public function __set($event, $handler) {
+    public function __set(string $event, IEventHandler $handler) : void {
         $this->registry[self::filter($event)] = $handler;
     }
 
-    /**
-     * @param string $event
-     */
-    public function __unset($event) {
+    public function __unset(string $event) : void {
         unset($this->registry[$event]);
     }
 
-    /**
-     * @param string $event
-     * @return callable
-     */
-    public function __get($event) {
+    public function __get(string $event) : callable {
         return $this->registry[$event];
     }
 
-    /**
-     * @param string $event
-     * @param array $arguments
-     * @return void
-     */
-    public function __call($event, $arguments) {
+    public function __call(string $event, array $arguments) : void {
         $func = $this[$event];
         if (is_null($func)) {
             throw new FeishuServerException(FeishuServerException::CODE_EVENT_NOT_HANDLED, [
@@ -102,6 +80,6 @@ class EventHub
                 'args' => $arguments,
             ]);
         }
-        return call_user_func_array($func, $arguments);
+        call_user_func_array($func, $arguments);
     }
 }

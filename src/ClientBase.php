@@ -40,17 +40,27 @@ class ClientBase
 
     protected Config $config;
 
-    private ICache $cache;
+    private TokenStorage $tokenStorage;
 
     private HttpClient $client;
 
-    public function __construct(ICache $cache, string $hostMode = 'GLOBAL.ONLINE') {
-        $this->cache = $cache;
-
+    public function __construct(Config $config, string $hostMode = 'GLOBAL.ONLINE') {
+        $this->config = $config;
         $this->hostMode = $hostMode;
+
+        $this->tokenStorage = new TokenStorage();
+
         $this->client = new HttpClient([
             'timeout' => 10.0,  // by sec
         ]);
+    }
+
+    public function getConfig() : Config {
+        return $this->config;
+    }
+
+    public function getTokenStorage() : TokenStorage {
+        return $this->tokenStorage;
     }
 
     private function getHost(string $suffix) : string {
@@ -192,23 +202,23 @@ class ClientBase
     }
 
     public function getAppAccessToken() : string {
-        $accessToken = $this->cache->get(ICache::APP_ACCESS_TOKEN_KEY);
+        $accessToken = $this->tokenStorage->getAppAccessToken();
         if (is_null($accessToken)) {
             $result = $this->fetchAppAccessToken();
             $accessToken = $result->app_access_token;
             $expire = $result->expire;
-            $this->cache->set(ICache::APP_ACCESS_TOKEN_KEY, $accessToken, $expire);
+            $this->tokenStorage->setAppAccessToken($accessToken, $expire);
         }
         return $accessToken;
     }
 
     public function getTenantAccessToken() : string {
-        $accessToken = $this->cache->get(ICache::TENANT_ACCESS_TOKEN_KEY);
+        $accessToken = $this->tokenStorage->getTenantAccessToken();
         if (is_null($accessToken)) {
             $result = $this->fetchTenantAccessToken();
             $accessToken = $result->tenant_access_token;
             $expire = $result->expire;
-            $this->cache->set(ICache::TENANT_ACCESS_TOKEN_KEY, $accessToken, $expire);
+            $this->tokenStorage->setTenantAccessToken($accessToken, $expire);
         }
         return $accessToken;
     }
